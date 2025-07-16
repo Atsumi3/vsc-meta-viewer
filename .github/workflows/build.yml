@@ -33,9 +33,19 @@ jobs:
       run: npm run compile
     
     - name: Run tests
-      run: npm test
+      run: xvfb-run -a npm test
+      if: runner.os == 'Linux'
       continue-on-error: true
-      if: false  # Skip tests for now as they require display
+    
+    - name: Run tests (Windows)
+      run: npm test
+      if: runner.os == 'Windows'
+      continue-on-error: true
+    
+    - name: Run tests (macOS)
+      run: npm test
+      if: runner.os == 'macOS'
+      continue-on-error: true
     
     - name: Package extension
       run: |
