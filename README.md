@@ -114,6 +114,38 @@ To uninstall the extension:
 code --uninstall-extension Atsumi3.meta-viewer
 ```
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### Workflows
+
+1. **Build and Test** (`build.yml`)
+   - Runs on push to main and pull requests
+   - Tests on multiple OS (Ubuntu, Windows, macOS) and Node versions
+   - Builds and packages the extension
+   - Uploads VSIX artifacts
+
+2. **Release** (`release.yml`)
+   - Triggered by version tags (e.g., `v1.0.0`)
+   - Creates GitHub releases with VSIX attachments
+   - Optionally publishes to VS Code Marketplace
+
+3. **Publish to Marketplace** (`publish.yml`)
+   - Manual workflow for publishing to VS Code Marketplace
+   - Updates version and creates release tag
+
+### Setting up for Publishing
+
+To enable automatic publishing to VS Code Marketplace:
+
+1. Create a Personal Access Token at https://marketplace.visualstudio.com/manage
+2. Add the token as `VSCE_PAT` in your repository secrets
+
+## Contributing
+
+Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines on contributing to this project.
+
 ## License
 
 This project is licensed under the ISC License.

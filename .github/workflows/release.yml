@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Compile
+      run: npm run compile
+    
+    - name: Install vsce
+      run: npm install -g @vscode/vsce
+    
+    - name: Package extension
+      run: vsce package
+    
+    - name: Get version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ## Changes in this Release
+          
+          ### Features
+          - File metadata display in table format
+          - Git integration (last author, commit hash)
+          - iOS provisioning profile support
+          - Media file information
+          - Binary data preview option
+          
+          ### Installation
+          1. Download the `.vsix` file from the assets below
+          2. Install using: `code --install-extension meta-viewer-${{ steps.get_version.outputs.VERSION }}.vsix`
+          
+          Or install via VS Code:
+          - Open Command Palette (Cmd/Ctrl+Shift+P)
+          - Run "Extensions: Install from VSIX..."
+          - Select the downloaded file
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./meta-viewer-${{ steps.get_version.outputs.VERSION }}.vsix
+        asset_name: meta-viewer-${{ steps.get_version.outputs.VERSION }}.vsix
+        asset_content_type: application/vsix
+    
+    - name: Publish to VS Code Marketplace
+      run: vsce publish
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      continue-on-error: true
