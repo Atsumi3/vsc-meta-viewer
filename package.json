@@ -14,7 +14,13 @@
   "engines": {
     "vscode": "^1.74.0"
   },
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
   "categories": ["Other"],
+  "keywords": ["metadata", "file info", "git", "file properties", "inspector"],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
