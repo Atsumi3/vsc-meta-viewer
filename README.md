@@ -49,10 +49,43 @@ You can configure the extension through VS Code settings:
 
 ## Installation
 
+### From Visual Studio Code Marketplace (Coming Soon)
+
 1. Open VS Code
 2. Go to Extensions (Cmd+Shift+X or Ctrl+Shift+X)
 3. Search for "Meta Viewer"
 4. Click Install
+
+### From VSIX Package (Local Installation)
+
+1. Download or build the `.vsix` file
+2. Install using one of these methods:
+   - **Command line**: `code --install-extension meta-viewer-0.0.1.vsix`
+   - **VS Code UI**: 
+     - Open Command Palette (Cmd+Shift+P or Ctrl+Shift+P)
+     - Run "Extensions: Install from VSIX..."
+     - Select the `.vsix` file
+
+### Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/Atsumi3/vsc-meta-viewer.git
+cd vsc-meta-viewer
+
+# Install dependencies
+npm install
+
+# Build the extension
+npm run compile
+
+# Package the extension
+npm install -g vsce
+vsce package
+
+# Install the generated VSIX
+code --install-extension meta-viewer-0.0.1.vsix
+```
 
 ## Development
 
@@ -69,6 +102,16 @@ npm run compile
 
 # Run in development mode
 npm run watch
+
+# Test the extension (F5 in VS Code)
+# This opens a new VS Code window with the extension loaded
+```
+
+### Uninstalling
+
+To uninstall the extension:
+```bash
+code --uninstall-extension Atsumi3.meta-viewer
 ```
 
 ## License
